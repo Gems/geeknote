@@ -111,7 +111,7 @@ COMMANDS_DICT = {
             "--tags":       {"altName": "-tg",
                              "help": "Notes with which tag/tags to search."},
             "--notebooks":  {"altName": "-nb",
-                             "help": "In which notebook search the note."},
+                             "help": "In which notebook search t he note."},
             "--date":       {"altName": "-d",
                              "help": "Set date in format dd.mm.yyyy or "
                                      "date range dd.mm.yyyy-dd.mm.yyyy."},
@@ -136,13 +136,28 @@ COMMANDS_DICT = {
                                  "default": False},
         }
     },
+    "list": {
+        "help": "List notes from Notebook.",
+        "firstArg": "--notebook",
+        "arguments": {
+            "--notebook": {
+                "altName": "-nb",
+                "help": "From which notebook list notes."
+            }
+        }
+    },
 
     # Notebooks
     "notebook-list": {
         "help": "Show the list of existing notebooks in your Evernote.",
-    },
-    "linked-list": {
-        "help": "Show the list of existing notebooks in your Evernote.",
+        "flags": {
+            "--linked": {
+                "altName": "-l",
+                "help": "To list linked notebooks",
+                "value": True,
+                "default": False
+            }
+        }
     },
     "notebook-create": {
         "help": "Create new notebook.",

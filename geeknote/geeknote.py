@@ -7,6 +7,7 @@ import sys
 import os
 import re
 import mimetypes
+import pprint
 
 import thrift.protocol.TBinaryProtocol as TBinaryProtocol
 import thrift.transport.THttpClient as THttpClient
@@ -15,6 +16,7 @@ import evernote.edam.userstore.constants as UserStoreConstants
 import evernote.edam.notestore.NoteStore as NoteStore
 import evernote.edam.error.ttypes as Errors
 import evernote.edam.type.ttypes as Types
+import evernote.edam.notestore.ttypes as NoteTypes
 
 import config
 import tools
@@ -130,6 +132,12 @@ class GeekNote(object):
         GeekNote.noteStore = NoteStore.Client(noteStoreProtocol)
 
         return GeekNote.noteStore
+
+    def getNoteStoreByUrl(self, url):
+        noteStoreHttpClient = THttpClient.THttpClient(url)
+        noteStoreProtocol = TBinaryProtocol.TBinaryProtocol(noteStoreHttpClient)
+
+        return NoteStore.Client(noteStoreProtocol)
 
     def checkVersion(self):
         versionOK = self.getUserStore().checkVersion("Python EDAMTest",
@@ -516,12 +524,14 @@ class Tags(GeekNoteConnector):
 class Notebooks(GeekNoteConnector):
     """ Work with auth Notebooks """
 
-    def list(self):
-        result = self.getEvernote().findNotebooks()
-        out.printList(result)
+    def list(self, linked=False):
+        evernote = self.getEvernote()
 
-    def listLinked(self):
-        result = self.getEvernote().findLinkedNotebooks()
+        if linked == False:
+            result = evernote.findNotebooks()
+        else:
+            result = evernote.findLinkedNotebooks()
+
         out.printList(result)
 
     def create(self, title):
@@ -704,6 +714,37 @@ class Notes(GeekNoteConnector):
           out.showNoteRaw(note)
         else:
           out.showNote(note)
+
+    def list(self, notebook):
+        evernote = self.getEvernote()
+        store = None
+        shareToken = evernote.authToken
+
+        localNotebooks = evernote.findNotebooks()
+
+        for key, item in enumerate(localNotebooks):
+            if item.name == notebook:
+                store = evernote.getNoteStore()
+
+        if not store:
+            linkedNotebooks = evernote.findLinkedNotebooks()
+
+            for key, item in enumerate(linkedNotebooks):
+                if item.shareName == notebook:
+                    store = evernote.getNoteStoreByUrl(item.noteStoreUrl)
+                    auth = store.authenticateToSharedNotebook(item.shareKey, evernote.authToken)
+                    shareToken = auth.authenticationToken
+
+                    break
+
+        updatedFilter = NoteTypes.NoteFilter()
+        offset = 0
+        maxNotes = 40000
+        resultSpec = NoteTypes.NotesMetadataResultSpec(includeCreated=True, includeUpdated=True, includeTitle=True, includeAttributes=True, includeTagGuids=True)
+
+        notes = store.findNotesMetadata(shareToken, updatedFilter, offset, maxNotes, resultSpec)
+
+        out.SearchResult(notes.notes, "*", showByStep=100, showUrl=True, store=store, authToken=shareToken)
 
     def _parseInput(self, title=None, content=None, tags=None, notebook=None, resources=None, note=None):
         result = {
@@ -913,12 +954,12 @@ def main(args=None):
         if COMMAND == 'find':
             Notes().find(**ARGS)
 
+        if COMMAND == 'list':
+            Notes().list(**ARGS)
+
         # Notebooks
         if COMMAND == 'notebook-list':
             Notebooks().list(**ARGS)
-
-        if COMMAND == 'linked-list':
-            Notebooks().listLinked(**ARGS)
 
         if COMMAND == 'notebook-create':
             Notebooks().create(**ARGS)

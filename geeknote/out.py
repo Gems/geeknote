@@ -226,7 +226,7 @@ def separator(symbol="", title=""):
 
 @preloaderStop
 def printList(listItems, title="", showSelector=False,
-              showByStep=20, showUrl=False):
+              showByStep=20, showUrl=False, store=None, authToken=None):
 
     if title:
         separator("=", title)
@@ -278,12 +278,12 @@ def printDate(timestamp):
     # Author @ash-2000 https://github.com/ash-2000
     # Check for crashing when timestamp is 13 digits on python2.7
     # pull request #260
-    
+
     if len(str(timestamp)) == 13:
         timestamp = int(str(timestamp)[0:-3])
 
     # ---
-    
+
     return datetime.date.strftime(datetime.date.fromtimestamp(timestamp / 1000), "%d.%m.%Y")
 
 def printLine(line, endLine="\n", out=sys.stdout):
