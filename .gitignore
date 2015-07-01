@@ -15,6 +15,11 @@ develop-eggs
 .idea
 .venv
 
+# Vagrant
+
+.vagrant
+Vagrantfile
+
 # Installer logs
 pip-log.txt
 
