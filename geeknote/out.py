@@ -239,7 +239,7 @@ def printList(listItems, title="", showSelector=False,
         printLine("%s : %s%s%s" % (
             str(key).rjust(3, " "),
             printDate(item.created).ljust(18, " ") if hasattr(item, 'created') else '',
-            item.title if hasattr(item, 'title') else item.name,
+            item.title if hasattr(item, 'title') else item.shareName if hasattr(item, 'shareName') else item.name,
             " " + (">>> " + config.NOTE_URL % item.guid) if showUrl else '',))
 
         if key % showByStep == 0 and key < total:
