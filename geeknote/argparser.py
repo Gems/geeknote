@@ -141,6 +141,9 @@ COMMANDS_DICT = {
     "notebook-list": {
         "help": "Show the list of existing notebooks in your Evernote.",
     },
+    "linked-list": {
+        "help": "Show the list of existing notebooks in your Evernote.",
+    },
     "notebook-create": {
         "help": "Create new notebook.",
         "arguments": {
