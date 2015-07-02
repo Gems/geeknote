@@ -136,13 +136,16 @@ COMMANDS_DICT = {
                                  "default": False},
         }
     },
-    "list": {
-        "help": "List notes from Notebook.",
+    "dump": {
+        "help": "Dump notes from Notebook to filesystem.",
         "firstArg": "--notebook",
         "arguments": {
             "--notebook": {
                 "altName": "-nb",
-                "help": "From which notebook list notes."
+                "help": "From which notebook dump notes."
+            },
+            "--path": {
+                "help": "Path to dump"
             }
         }
     },

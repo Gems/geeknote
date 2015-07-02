@@ -59,3 +59,12 @@ if DEV_MODE:
     USER_BASE_URL = USER_BASE_URL_SANDBOX
 
 NOTE_URL = NOTE_URL.replace('%domain%', USER_BASE_URL)
+
+DUMP_PATH = "./out"
+DUMP_RESOURCE_MIME_PATH = {
+    "image/jpeg": "./images",
+    "image/png": "./images",
+    "image/jpg": "./images",
+    "image/gif": "./images",
+    "image/svg": "./images"
+}
