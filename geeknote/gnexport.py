@@ -113,6 +113,7 @@ def main(args=None):
                 noteWriter.write(u"\t</tags>\n")
                 noteWriter.write(u"\t<author>%s</author>\n" % note.attributes.author.decode('utf-8'))
                 noteWriter.write(u"\t<title>%s</title>\n" % note.title.decode('utf-8'))
+                noteWriter.write(u"\t<created>%s</created>\n" % note.created)
 
                 if note.attributes.lastEditedBy:
                     noteWriter.write(u"\t<lastEditedBy>%s</lastEditedBy>\n" % note.attributes.lastEditedBy.decode('utf-8'))
