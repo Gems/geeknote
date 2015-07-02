@@ -60,11 +60,11 @@ if DEV_MODE:
 
 NOTE_URL = NOTE_URL.replace('%domain%', USER_BASE_URL)
 
-DUMP_PATH = "./out"
+DUMP_PATH = "./out/notes"
 DUMP_RESOURCE_MIME_PATH = {
-    "image/jpeg": "./images",
-    "image/png": "./images",
-    "image/jpg": "./images",
-    "image/gif": "./images",
-    "image/svg": "./images"
+    "image/jpeg": "./out/images",
+    "image/png": "./out/images",
+    "image/jpg": "./out/images",
+    "image/gif": "./out/images",
+    "image/svg": "./out/images"
 }
