@@ -18,6 +18,20 @@
     authorAva: { ./img/{/note/author}.jpg }
     tags: { /note/tags (через запятую) }
     ---
-    
+
+  </xsl:template>
+
+  <xsl:template match="en-note/*[1]/i">
+    <xsl:apply-templates select="." mode="emphase" />
+  </xsl:template>
+
+  <xsl:template match="en-note/*[1][local-name() = 'i']">
+    <xsl:apply-templates select="." mode="emphase" />
+  </xsl:template>
+
+  <xsl:template match="*" mode="emphase">
+    <blockquote>
+      <xsl:copy-of select="*" />
+    </blockquote>
   </xsl:template>
 </xsl:stylesheet>

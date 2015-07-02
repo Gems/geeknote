@@ -9,6 +9,7 @@ import re
 import mimetypes
 import pprint
 import io
+import cgi
 
 import thrift.protocol.TBinaryProtocol as TBinaryProtocol
 import thrift.transport.THttpClient as THttpClient
@@ -78,7 +79,7 @@ def main(args=None):
         tagsMap = {}
 
         for key, item in enumerate(tags):
-            tagsMap[item.guid] = item.name
+            tagsMap[item.guid] = cgi.escape(item.name)
 
         updatedFilter = NoteTypes.NoteFilter()
         offset = 0
@@ -111,12 +112,12 @@ def main(args=None):
                     noteWriter.write(u"\t\t<tag>%s</tag>\n" % tagsMap[tag].decode('utf-8'))
 
                 noteWriter.write(u"\t</tags>\n")
-                noteWriter.write(u"\t<author>%s</author>\n" % note.attributes.author.decode('utf-8'))
-                noteWriter.write(u"\t<title>%s</title>\n" % note.title.decode('utf-8'))
+                noteWriter.write(u"\t<author>%s</author>\n" % cgi.escape(note.attributes.author).decode('utf-8'))
+                noteWriter.write(u"\t<title>%s</title>\n" % cgi.escape(note.title).decode('utf-8'))
                 noteWriter.write(u"\t<created>%s</created>\n" % note.created)
 
                 if note.attributes.lastEditedBy:
-                    noteWriter.write(u"\t<lastEditedBy>%s</lastEditedBy>\n" % note.attributes.lastEditedBy.decode('utf-8'))
+                    noteWriter.write(u"\t<lastEditedBy>%s</lastEditedBy>\n" % cgi.escape(note.attributes.lastEditedBy).decode('utf-8'))
 
                 if note.resources:
                     noteWriter.write(u"\t<resources>\n")
